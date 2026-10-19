@@ -27,6 +27,9 @@ def create_app(test_config: dict[str, Any] | None = None) -> Flask:
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE='Lax',
         SESSION_COOKIE_SECURE=os.environ.get('SESSION_COOKIE_SECURE') == '1',
+        PERMANENT_SESSION_LIFETIME=timedelta(
+            days=int(os.environ.get('SESSION_LIFETIME_DAYS', '30'))
+        ),
     )
     if test_config:
         app.config.update(test_config)
@@ -153,6 +156,7 @@ def register_routes(app: Flask) -> None:
         db.session.add(user)
         db.session.commit()
         session.clear()
+        session.permanent = False
         session['user_id'] = user.id
         return jsonify(user=user_payload(user)), 201
 
@@ -168,6 +172,7 @@ def register_routes(app: Flask) -> None:
             return jsonify(error='Credenziali non valide'), 401
 
         session.clear()
+        session.permanent = bool(data.get('remember'))
         session['user_id'] = user.id
         return jsonify(user=user_payload(user))
 

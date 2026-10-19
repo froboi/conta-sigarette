@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quitstats-v7';
+const CACHE_NAME = 'quitstats-v8';
 const APP_SHELL = ['/', '/static/css/app.css', '/static/js/app.js', '/static/manifest.json'];
 
 self.addEventListener('install', (event) => {
