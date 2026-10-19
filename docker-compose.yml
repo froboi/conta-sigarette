@@ -7,7 +7,7 @@ services:
     init: true
     environment:
       DATABASE_URL: sqlite:////app/data/quitstats.db
-      SECRET_KEY: AdH4RZkfoV-VcLUZctUjU9jKJXbQA1wot9GY1dErH6weHNqj_-twRsFJFz_LpW05
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env}
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-1}
     ports:
       - "${QUITSTATS_PORT:-5000}:5000"
