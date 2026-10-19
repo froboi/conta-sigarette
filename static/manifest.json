@@ -1,0 +1,10 @@
+{
+  "name": "QuitStats",
+  "short_name": "QuitStats",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f8f6",
+  "theme_color": "#0f766e",
+  "description": "Monitora il consumo di sigarette e condividi il tuo percorso.",
+  "icons": []
+}

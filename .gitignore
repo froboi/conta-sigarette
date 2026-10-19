@@ -1,0 +1,126 @@
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+
+# Bytecode e cache di Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# File generati da coverage e test
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.hypothesis/
+
+# Packaging e build
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+MANIFEST
+
+# -----------------------------------------------------------------------------
+# Virtual environment
+# -----------------------------------------------------------------------------
+
+.venv/
+venv/
+env/
+ENV/
+.conda/
+
+# -----------------------------------------------------------------------------
+# Database locali e dati persistenti
+# -----------------------------------------------------------------------------
+
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+/data/
+/instance/
+data/
+instance/
+*.dump
+*.sql
+*.sql.gz
+*.bak
+*.backup
+
+# -----------------------------------------------------------------------------
+# Configurazione e segreti
+# -----------------------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+secrets/
+*.secret
+
+# -----------------------------------------------------------------------------
+# Docker e Docker Compose
+# -----------------------------------------------------------------------------
+
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.*.local.yml
+docker-data/
+docker-volumes/
+volumes/
+
+# -----------------------------------------------------------------------------
+# Visual Studio Code e altri editor
+# -----------------------------------------------------------------------------
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+*.code-workspace
+.fleet/
+*.swp
+*.swo
+*~
+.history/
+
+# -----------------------------------------------------------------------------
+# Sistema operativo Linux
+# -----------------------------------------------------------------------------
+
+.directory
+.Trash-*
+*.log
+logs/
+tmp/
+temp/
+.cache/
+*.lock
+
+# -----------------------------------------------------------------------------
+# File locali e temporanei del progetto
+# -----------------------------------------------------------------------------
+
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.orig
+*.rej
+local/
+*.local
