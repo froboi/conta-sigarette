@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0f766e"><meta name="description" content="QuitStats">
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=4">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=5">
   <title>QuitStats</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
     <section id="auth-view" class="auth-layout">
       <div class="intro"><p class="eyebrow">Il tuo percorso, un dato alla volta</p><h1>Fai spazio a scelte più consapevoli.</h1><p>Registra le sigarette in pochi secondi e condividi i progressi con una persona di fiducia.</p></div>
       <div class="card auth-card"><div class="tabs"><button class="tab active" data-auth-mode="login" type="button">Accedi</button><button class="tab" data-auth-mode="register" type="button">Registrati</button></div>
-        <form id="auth-form"><label>Username<input id="username" autocomplete="username" required maxlength="50"></label><label>Password<input id="password" type="password" autocomplete="current-password" minlength="8" required></label><label id="role-field" hidden>Profilo<select id="role"><option value="fumatore">Fumatore</option><option value="sostenitore">Sostenitore</option></select></label><button class="button button-primary button-wide" type="submit" id="auth-submit">Accedi</button><p id="auth-message" class="message" role="alert"></p></form>
+        <form id="auth-form"><label>Username<input id="username" autocomplete="username" required maxlength="50"></label><label>Password<input id="password" type="password" autocomplete="current-password" minlength="8" required></label><label id="role-field" hidden>Profilo<select id="role"><option value="fumatore">Fumatore</option><option value="sostenitore">Sostenitore</option></select></label><label id="remember-field" class="checkbox-label"><input id="remember-me" type="checkbox"> Rimani connesso</label><button class="button button-primary button-wide" type="submit" id="auth-submit">Accedi</button><p id="auth-message" class="message" role="alert"></p></form>
       </div>
     </section>
     <section id="app-view" hidden>
@@ -28,6 +28,6 @@
     </section>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=7" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=8" defer></script>
 </body>
 </html>
