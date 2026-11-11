@@ -226,6 +226,7 @@ Inserire il valore generato in `.env`:
 SECRET_KEY=valore-casuale-generato
 SESSION_COOKIE_SECURE=1
 SESSION_LIFETIME_DAYS=30
+APP_TIMEZONE=Europe/Rome
 QUITSTATS_PORT=5000
 ```
 
@@ -237,6 +238,8 @@ Parametri disponibili:
   usare `0` solo per sviluppo locale in HTTP.
 - `SESSION_LIFETIME_DAYS`: durata, in giorni, della sessione quando l'utente
   seleziona `Rimani connesso` durante il login. Il default è `30`.
+- `APP_TIMEZONE`: timezone IANA usato per determinare il giorno locale nelle
+  statistiche giornaliere e settimanali. Il default è `Europe/Rome`.
 - `QUITSTATS_PORT`: porta pubblicata sull'host e utilizzata da Nginx Proxy
   Manager per raggiungere il container. Il default è `5000`.
 

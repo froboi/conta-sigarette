@@ -4,15 +4,26 @@ import os
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 from typing import Any, Callable
+from zoneinfo import ZoneInfo
 
 from flask import Flask, jsonify, render_template, request, session
-from sqlalchemy import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from databases import Cigarette, User, db
 
 
 VALID_ROLES = {'fumatore', 'sostenitore'}
+DEFAULT_TIMEZONE = 'Europe/Rome'
+
+
+def app_timezone() -> ZoneInfo:
+    return ZoneInfo(os.environ.get('APP_TIMEZONE', DEFAULT_TIMEZONE))
+
+
+def as_utc(value: datetime) -> datetime:
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 def create_app(test_config: dict[str, Any] | None = None) -> Flask:
@@ -95,34 +106,43 @@ def user_payload(user: User) -> dict[str, Any]:
 
 
 def stats_payload(user: User) -> dict[str, Any]:
-    now = datetime.now(timezone.utc)
-    start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    start_of_month = start_of_day.replace(day=1)
-    start_of_week = start_of_day - timedelta(days=start_of_day.weekday())
-    query = Cigarette.query.filter(
-        Cigarette.user_id == user.id,
-        Cigarette.timestamp >= start_of_week,
+    local_zone = app_timezone()
+    local_now = datetime.now(timezone.utc).astimezone(local_zone)
+    start_of_day_local = local_now.replace(
+        hour=0, minute=0, second=0, microsecond=0
     )
-    weekly = query.with_entities(
-        func.date(Cigarette.timestamp).label('day'),
-        func.count(Cigarette.id).label('count'),
-    ).group_by(func.date(Cigarette.timestamp)).all()
-    weekly_total = sum(count for _, count in weekly)
+    start_of_week_local = start_of_day_local - timedelta(
+        days=local_now.weekday()
+    )
+    start_of_month_local = start_of_day_local.replace(day=1)
+    start_of_week_utc = start_of_week_local.astimezone(timezone.utc)
+    start_of_day_utc = start_of_day_local.astimezone(timezone.utc)
+    start_of_month_utc = start_of_month_local.astimezone(timezone.utc)
+    weekly_cigarettes = Cigarette.query.filter(
+        Cigarette.user_id == user.id,
+        Cigarette.timestamp >= start_of_week_utc,
+    ).all()
+    weekly_by_day: dict[str, int] = {}
+    for cigarette in weekly_cigarettes:
+        day = as_utc(cigarette.timestamp).astimezone(local_zone).date().isoformat()
+        weekly_by_day[day] = weekly_by_day.get(day, 0) + 1
+    weekly = sorted(weekly_by_day.items())
+    weekly_total = sum(weekly_by_day.values())
 
     today = Cigarette.query.filter(
         Cigarette.user_id == user.id,
-        Cigarette.timestamp >= start_of_day,
+        Cigarette.timestamp >= start_of_day_utc,
     ).order_by(Cigarette.timestamp.desc()).all()
     month = Cigarette.query.filter(
         Cigarette.user_id == user.id,
-        Cigarette.timestamp >= start_of_month,
+        Cigarette.timestamp >= start_of_month_utc,
     ).count()
     total = Cigarette.query.filter_by(user_id=user.id).count()
 
     return {
         'today': len(today),
         'today_cigarettes': [
-            {'id': cigarette.id, 'timestamp': cigarette.timestamp.isoformat()}
+            {'id': cigarette.id, 'timestamp': as_utc(cigarette.timestamp).isoformat()}
             for cigarette in today
         ],
         'month': month,
