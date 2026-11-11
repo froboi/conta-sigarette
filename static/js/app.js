@@ -8,11 +8,14 @@ async function api(path, options = {}) {
   return body;
 }
 function showToast(message) { const toast = $('#toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2600); }
+function localDateKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
 function renderWeekly(target, weekly = []) {
   const byDay = Object.fromEntries(weekly.map((item) => [item.day, item.count]));
   const today = new Date(); const monday = new Date(today); monday.setHours(0, 0, 0, 0); monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-  const days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']; const counts = days.map((label, index) => { const day = new Date(monday); day.setDate(monday.getDate() + index); const key = day.toISOString().slice(0, 10); return { label, key, count: byDay[key] || 0 }; }); const max = Math.max(...counts.map((item) => item.count), 1);
-  $(target).innerHTML = counts.map((item) => `<div class="bar-item"><div class="bar"><i class="${item.key === today.toISOString().slice(0, 10) ? 'today' : ''}" style="height:${Math.max(5, item.count / max * 95)}px"></i></div>${item.label}<br>${item.count}</div>`).join('');
+  const days = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']; const counts = days.map((label, index) => { const day = new Date(monday); day.setDate(monday.getDate() + index); const key = localDateKey(day); return { label, key, count: byDay[key] || 0 }; }); const max = Math.max(...counts.map((item) => item.count), 1);
+  $(target).innerHTML = counts.map((item) => `<div class="bar-item"><div class="bar"><i class="${item.key === localDateKey(today) ? 'today' : ''}" style="height:${Math.max(5, item.count / max * 95)}px"></i></div>${item.label}<br>${item.count}</div>`).join('');
 }
 function renderStats(stats) {
   $('#today-count').textContent = stats.today; $('#month-count').textContent = stats.month; $('#total-count').textContent = stats.total;
